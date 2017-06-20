@@ -1,5 +1,5 @@
 # BoxTokenGenerator
-Box token generator is a simple C# application that leverages BoxV2 windows SDK to generate Auth tokens.
+Box token generator is a simple C# WPF application that leverages BoxV2 windows SDK to generate Auth tokens.
 
 ## BeforeYouCompile
 You need to add two files under __Bin/Release__  or __Bin/Debug__ folder
