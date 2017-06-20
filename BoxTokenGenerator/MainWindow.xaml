@@ -26,7 +26,11 @@
 
         <WebBrowser Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="6" x:Name="webBrowser" Visibility="Visible" Navigated="webBrowser_Navigated" />
         <TextBlock Grid.Column="1" Grid.Row="1" Text="Logged in as" Margin="0,0,0,10" />
-        <TextBlock x:Name="lblLoggedInUser" Grid.Column="2" Grid.Row="1" Text="" Margin="10,0" Foreground="DarkBlue" />
+        <TextBlock x:Name="lblLoggedInUser" Grid.Column="2" Grid.Row="1" Text="" Margin="10,0" Foreground="DarkBlue" >
+            <TextBlock.Effect>
+                <DropShadowEffect BlurRadius="1" Opacity="0.4" ShadowDepth="2"/>
+            </TextBlock.Effect>
+        </TextBlock>
         <TextBlock Grid.Column="1" Grid.Row="2" Text="Access Token" Margin="0,0,0,0"/>
         <TextBlock x:Name="txtAccessToken" FontSize="12" Grid.Column="2" Grid.Row="2"  Width="270" Text="" HorizontalAlignment="Left" Margin="10,0,0,0" FontStyle="Italic" />
         <Button x:Name="btnCopyAccessToken" Click="btnCopyAccessToken_Click" Grid.Column="3" Grid.Row="2" Width="60" Height="30"  Content="Copy" HorizontalAlignment="Left" Margin="10,0,0,5"/>
