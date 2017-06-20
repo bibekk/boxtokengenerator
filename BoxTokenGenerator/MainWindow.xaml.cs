@@ -71,6 +71,7 @@ namespace BoxTokenGenerator
                     TokenConfig.writeTokens(session.AccessToken, session.RefreshToken);
                     Box.V2.Models.BoxUser u = await Client.UsersManager.GetCurrentUserInformationAsync();
                     loggedin_user = u.Login;
+                    lblLoggedInUser.Text = loggedin_user;
                     main.Visibility = Visibility.Visible;
                     txtAccessToken.Text = session.AccessToken;
                     txtRefreshToken.Text = session.RefreshToken;
