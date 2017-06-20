@@ -5,8 +5,8 @@ namespace BoxTokenGenerator
 {
     public class TokenConfig
     {
-        public const string config_filename = "../../Auth/config.xml";
-        private const string token_filename = "../../Auth/tokens.xml";
+        public const string config_filename = "config.xml";
+        private const string token_filename = "tokens.xml";
         /// <summary>
         /// Writes token to the xml file
         /// </summary>
