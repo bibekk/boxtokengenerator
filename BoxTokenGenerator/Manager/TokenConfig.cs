@@ -1,11 +1,12 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 
 namespace BoxTokenGenerator
 {
     public class TokenConfig
     {
-        public const string config_filename = "config.xml";
-        private const string token_filename = "tokens.xml";
+        public const string config_filename = "../../Auth/config.xml";
+        private const string token_filename = "../../Auth/tokens.xml";
         /// <summary>
         /// Writes token to the xml file
         /// </summary>
@@ -30,15 +31,23 @@ namespace BoxTokenGenerator
         /// <returns></returns>
         public static string readConfig(string type)
         {
-            XDocument doc = XDocument.Load(config_filename);
-            string value = string.Empty;
-
-            foreach (XElement el in doc.Root.Elements())
+            try
             {
-                if (el.Name.ToString().ToLower().Trim() == type.Trim().ToLower())
-                    value = el.Value;
+                XDocument doc = XDocument.Load(config_filename);
+                string value = string.Empty;
+
+                foreach (XElement el in doc.Root.Elements())
+                {
+                    if (el.Name.ToString().ToLower().Trim() == type.Trim().ToLower())
+                        value = el.Value;
+                }
+                return value;
             }
-            return value;
+            catch (Exception)
+            {
+               //(ex.Message);
+                return "error";
+            }
         }
 
         /// <summary>
