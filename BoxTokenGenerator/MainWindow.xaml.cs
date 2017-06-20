@@ -1,21 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Box.V2;
+﻿using Box.V2;
 using Box.V2.Auth;
 using Box.V2.Config;
 using Box.V2.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Navigation;
 
 namespace BoxTokenGenerator
 {
@@ -31,6 +21,7 @@ namespace BoxTokenGenerator
         public static string loggedin_user = string.Empty;
         public IBoxConfig Config { get; set; }
         public static BoxClient Client { get; set; }
+        public const int formHeight = 200;
         #endregion variables
 
         public MainWindow()
@@ -39,15 +30,22 @@ namespace BoxTokenGenerator
             this.request = BoxManagerConst.authurl + "&client_id=" + BoxManagerConst.client_id + "&state=security_token%3DKnhMJatFipTAnM0nHlZA";
         }
 
-        private async void main_Loaded(object sender, RoutedEventArgs e)
-        {
-        }
 
+        /// <summary>
+        /// Writes new tokens into tokens.xml file whenever new tokesn are obtained or refreshed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Auth_SessionAuthenticated(object sender, SessionAuthenticatedEventArgs e) 
         {
             TokenConfig.writeTokens(e.Session.AccessToken, e.Session.RefreshToken);
         }
 
+        /// <summary>
+        /// Web Browser redirection in case of first login/logout or corrupted tokens
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void webBrowser_Navigated(object sender, NavigationEventArgs e)
         {
             if (e.Uri.Host == BoxManagerConst.redirecturi)
@@ -76,7 +74,7 @@ namespace BoxTokenGenerator
                     main.Visibility = Visibility.Visible;
                     txtAccessToken.Text = session.AccessToken;
                     txtRefreshToken.Text = session.RefreshToken;
-                    mainWindow.Height = 220;
+                    mainWindow.Height = formHeight;
                 }
                 catch (BoxException ex)
                 {
@@ -107,9 +105,13 @@ namespace BoxTokenGenerator
             }
         }
 
+        /// <summary>
+        /// main window load method that checks the valid session
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void mainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-
             try
             {
                 session = MyOAuth.getSession();
@@ -130,11 +132,11 @@ namespace BoxTokenGenerator
                         txtAccessToken.Text = session.AccessToken;
                         txtRefreshToken.Text = session.RefreshToken;
                         lblLoggedInUser.Text = loggedin_user;
-                        mainWindow.Height = 220;
+                        mainWindow.Height = formHeight;
                     }
                 }
 
-                catch (BoxException ex)
+                catch (BoxException)
                 {
                     webBrowser.Visibility = Visibility.Visible;
                     session = null;
@@ -165,10 +167,15 @@ namespace BoxTokenGenerator
             if (txtAccessToken.Text != "" && txtRefreshToken.Text != "")
             {
                 Clipboard.SetText(txtAccessToken.Text.Trim() + "{#}" + txtRefreshToken.Text.Trim());
-                MessageBox.Show("Tokens Copied. Copied tokens are seperated by {#}.", "Tokens to clipboard", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Tokens Copied. Copied tokens are seperated by {#}.", "Copy Tokens to clipboard", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
+        /// <summary>
+        /// logout session
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
             var answer = MessageBox.Show("Are you sure you want to logout?", "Logout", MessageBoxButton.YesNo, MessageBoxImage.Warning);
@@ -181,6 +188,5 @@ namespace BoxTokenGenerator
                 webBrowser.Source = new Uri(this.request);
             }
         }
-
     }
 }
